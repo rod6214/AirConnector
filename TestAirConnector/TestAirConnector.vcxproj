@@ -88,14 +88,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src;C:\Program Files %28x86%29\MariaDB\MariaDB C++ Connector\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>
-      </AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Program Files %28x86%29\MariaDB\MariaDB C++ Connector;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>../src/Debug/AirConnector.lib</AdditionalOptions>
+      <AdditionalDependencies>mariadbcpp.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -144,6 +144,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="TestAirConnector.cpp" />
+    <ClCompile Include="TestMariaDB.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="TestMariaDB.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "PlaneEvent.h"
+#include "TestMariaDB.h"
 
 void testCallback(AirPlane* airPlane, DWORD ObjectID)
 {
@@ -15,8 +16,8 @@ void testCallback(AirPlane* airPlane, DWORD ObjectID)
 
 int __cdecl _tmain(int argc, _TCHAR* argv[])
 {
-
-    SubscribePlaneEvent(testCallback);
+    testConn();
+    //SubscribePlaneEvent(testCallback);
     
 	return 0;
 }
