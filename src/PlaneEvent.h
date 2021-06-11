@@ -1,10 +1,12 @@
+#pragma once
+
+#ifndef PLANEEVENT_H
+#define PLANEEVENT_H
+
 #include "framework.h"
 #include <tchar.h>
 #include <stdio.h>
 #include <strsafe.h>
-
-int     quit = 0;
-HANDLE  hSimConnect = NULL;
 
 struct AirPlane
 {
@@ -30,4 +32,7 @@ enum DATA_REQUEST_ID {
     REQUEST_1,
 };
 
-void DLLTEMPLATE_API SubscribePlaneEvent(pPlaneEventCallback callback);
+void DLLTEMPLATE_API SubscribePlaneEvent(pPlaneEventCallback callback, DWORD period = 5);
+
+
+#endif // PLANEEVENT_H

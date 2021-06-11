@@ -2,7 +2,9 @@
 //
 
 #include <iostream>
-#include "PlaneEvent.h"
+#include <windows.h>
+#include <tchar.h>
+
 #include "TestMariaDB.h"
 
 void testCallback(AirPlane* airPlane, DWORD ObjectID)
@@ -12,12 +14,14 @@ void testCallback(AirPlane* airPlane, DWORD ObjectID)
         airPlane->altitude, airPlane->kohlsmann, airPlane->bank,
         airPlane->pitch, airPlane->heading, airPlane->headingMagnetic,
         airPlane->isOnGround ? "true" : "false");
+
+    insertDataPlane(airPlane);
 }
 
 int __cdecl _tmain(int argc, _TCHAR* argv[])
 {
-    testConn();
-    //SubscribePlaneEvent(testCallback);
+    //testConn();
+    SubscribePlaneEvent(testCallback, 10);
     
 	return 0;
 }

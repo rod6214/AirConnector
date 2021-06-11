@@ -7,6 +7,9 @@
 #include "PlaneEvent.h"
 #include "SimConnect.h"
 
+static int     quit = 0;
+static HANDLE  hSimConnect = NULL;
+
 
 void CALLBACK MyDispatchProcRD(SIMCONNECT_RECV* pData, DWORD cbData, void *pContext)
 {
@@ -52,7 +55,7 @@ void CALLBACK MyDispatchProcRD(SIMCONNECT_RECV* pData, DWORD cbData, void *pCont
     }
 }
 
-void DLLTEMPLATE_API SubscribePlaneEvent(pPlaneEventCallback callback)
+void DLLTEMPLATE_API SubscribePlaneEvent(pPlaneEventCallback callback, DWORD period)
 {
     HRESULT hr;
 
@@ -94,7 +97,7 @@ void DLLTEMPLATE_API SubscribePlaneEvent(pPlaneEventCallback callback)
         if (hr != S_OK) throw "It couldn't create the definition Sim On Ground";
 
         hr = SimConnect_RequestDataOnSimObject(hSimConnect, REQUEST_1, DEFINITION_1, SIMCONNECT_OBJECT_ID_USER, 
-            SIMCONNECT_PERIOD_SECOND, SIMCONNECT_DATA_REQUEST_FLAG_CHANGED, 0, 1);
+            SIMCONNECT_PERIOD_SECOND, SIMCONNECT_DATA_REQUEST_FLAG_CHANGED, 0, period);
         if (hr != S_OK) throw "It can't init the request data";
 
         while( 0 == quit )
