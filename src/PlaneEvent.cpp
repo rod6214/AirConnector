@@ -4,17 +4,21 @@
 //  
 //	Description:
 //------------------------------------------------------------------------------
+#include <time.h>
+#include <string>
+#include <memory>
 #include "PlaneEvent.h"
 #include "SimConnect.h"
+
+#include <iostream>
 
 static int     quit = 0;
 static HANDLE  hSimConnect = NULL;
 
+static std::unique_ptr<std::string> getTime();
 
 void CALLBACK MyDispatchProcRD(SIMCONNECT_RECV* pData, DWORD cbData, void *pContext)
-{
-    //HRESULT hr;
-    
+{   
     switch(pData->dwID)
     {
         case SIMCONNECT_RECV_ID_SIMOBJECT_DATA:
@@ -31,7 +35,14 @@ void CALLBACK MyDispatchProcRD(SIMCONNECT_RECV* pData, DWORD cbData, void *pCont
                 {
                     pPlaneEventCallback callback = (pPlaneEventCallback)pContext;
 
-                    callback((AirPlane*)&pObjData->dwData, ObjectID);
+                    PlaneData planedata;
+                    planedata.ptr_datetime = getTime();
+                    planedata.airPlane = pS;
+                    planedata.ObjectID = ObjectID;
+
+                    std::shared_ptr<PlaneData> ptr_planedata = std::make_shared<PlaneData>(planedata);
+
+                    callback(ptr_planedata);
                 }
                 break;
             }
@@ -53,6 +64,34 @@ void CALLBACK MyDispatchProcRD(SIMCONNECT_RECV* pData, DWORD cbData, void *pCont
             printf("\nReceived:%d",pData->dwID);
             break;
     }
+}
+
+static std::unique_ptr<std::string> getTime()
+{
+    static struct tm newtime;
+    static __time32_t aclock;
+    static char buffer[32];
+
+    _time32(&aclock);   // Get time in seconds.
+    _localtime32_s(&newtime, &aclock);   // Convert time to struct tm form.
+
+    // Print local time as a string.
+    std::string* time = new std::string();
+    
+    auto ptr_time = std::make_unique<std::string>();
+
+    size_t total = strftime(buffer, 32, "%Y-%m-%d %H:%M:%S", &newtime);
+
+    if (!total)
+    {
+        printf("Error...");
+    }
+    else
+    {
+        ptr_time->assign(buffer, 32);
+    }
+ 
+    return ptr_time;
 }
 
 void DLLTEMPLATE_API SubscribePlaneEvent(pPlaneEventCallback callback, DWORD period)

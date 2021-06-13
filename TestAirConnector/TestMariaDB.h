@@ -8,6 +8,6 @@
 //#include "PlaneEvent.h"
 
 void testConn();
-void insertDataPlane(AirPlane* airplane);
+void insertDataPlane(std::shared_ptr<PlaneData> ptr_planedata);
 
 #endif

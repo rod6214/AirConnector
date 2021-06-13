@@ -22,7 +22,14 @@ struct AirPlane
     unsigned long long isOnGround;
 };
 
-typedef void (*pPlaneEventCallback)(AirPlane* airPlane, DWORD ObjectID);
+struct PlaneData
+{
+    DWORD ObjectID;
+    AirPlane* airPlane;
+    std::shared_ptr<std::string> ptr_datetime;
+};
+
+typedef void (*pPlaneEventCallback)(std::shared_ptr<PlaneData> ptr_planedata);
 
 enum DATA_DEFINE_ID {
     DEFINITION_1,
