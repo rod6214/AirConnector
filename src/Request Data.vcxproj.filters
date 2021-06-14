@@ -7,6 +7,9 @@
     <ClCompile Include="PlaneEvent.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
+    <ClCompile Include="MariaDB.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sources">
@@ -21,6 +24,9 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="framework.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MariaDB.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>

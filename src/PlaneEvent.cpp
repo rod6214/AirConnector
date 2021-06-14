@@ -73,11 +73,8 @@ static std::unique_ptr<std::string> getTime()
     static char buffer[32];
 
     _time32(&aclock);   // Get time in seconds.
-    _localtime32_s(&newtime, &aclock);   // Convert time to struct tm form.
+    _gmtime32_s(&newtime, &aclock);   // Convert time to struct tm form.
 
-    // Print local time as a string.
-    std::string* time = new std::string();
-    
     auto ptr_time = std::make_unique<std::string>();
 
     size_t total = strftime(buffer, 32, "%Y-%m-%d %H:%M:%S", &newtime);

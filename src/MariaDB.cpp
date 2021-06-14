@@ -1,5 +1,7 @@
-#include "TestMariaDB.h"
+#include "MariaDB.h"
+#include <stdio.h>
 
+#include <string.h>
 void testConn() {
 	sql::Driver* driver = sql::mariadb::get_driver_instance();
 
@@ -23,7 +25,7 @@ void testConn() {
 
 }
 
-void insertDataPlane(std::shared_ptr<PlaneData> ptr_planedata)
+void DLLTEMPLATE_API insertDataPlane(std::shared_ptr<PlaneData> ptr_planedata)
 {
 	auto planedata = ptr_planedata.get();
 	auto datetime = planedata->ptr_datetime.get()->c_str();
@@ -54,7 +56,7 @@ void insertDataPlane(std::shared_ptr<PlaneData> ptr_planedata)
 	conn->close();
 }
 
-void checkIfExists(std::shared_ptr<PlaneData> ptr_planedata)
+bool DLLTEMPLATE_API positionHasChanged(std::shared_ptr<PlaneData> ptr_planedata)
 {
 	auto planedata = ptr_planedata.get();
 	auto datetime = planedata->ptr_datetime.get()->c_str();
@@ -65,5 +67,25 @@ void checkIfExists(std::shared_ptr<PlaneData> ptr_planedata)
 	sql::SQLString pwd("pass");
 	std::unique_ptr<sql::Connection> conn(driver->connect("tcp://localhost:3306/simconnector", user, pwd));
 
-	std::unique_ptr<sql::PreparedStatement> stmnt(conn->prepareStatement("where altitude, latitude from plane"));
+	std::unique_ptr<sql::PreparedStatement> stmnt(conn->prepareStatement("select latitude, longitude from plane where latitude=? and longitude=?"));
+
+	const auto lenLat = static_cast<size_t>(_scprintf("%.4f", airplane->latitude));
+	const auto lenLon = static_cast<size_t>(_scprintf("%.4f", airplane->longitude));
+
+	std::string strLat(lenLat, '\0');
+	std::string strLon(lenLon, '\0');
+	
+	_CSTD sprintf_s(&strLat[0], lenLat + 1, "%.4f", airplane->latitude);
+	_CSTD sprintf_s(&strLon[0], lenLon + 1, "%.4f", airplane->longitude);
+
+	stmnt->setString(1, &strLat[0]);
+	stmnt->setString(2, &strLon[0]);
+	
+	sql::ResultSet* results = stmnt->executeQuery();
+	
+	size_t size = results->rowsCount();
+
+	conn->close();
+
+	return size == 0;
 }

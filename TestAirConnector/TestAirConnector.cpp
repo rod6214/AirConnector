@@ -1,7 +1,8 @@
 // TestAirConnector.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 #include <iostream>
-#include "TestMariaDB.h"
+#include <MariaDB.h>
+//#include "TestMariaDB.h"
 
 void testCallback(std::shared_ptr<PlaneData> ptr_planedata)
 {
@@ -16,7 +17,10 @@ void testCallback(std::shared_ptr<PlaneData> ptr_planedata)
         airPlane->isOnGround ? "true" : "false",
         planedata->ptr_datetime.get()->c_str());
 
-    insertDataPlane(ptr_planedata);
+    if (positionHasChanged(ptr_planedata))
+    {
+        insertDataPlane(ptr_planedata);
+    }
 }
 
 int __cdecl _tmain(int argc, _TCHAR* argv[])

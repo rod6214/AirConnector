@@ -144,10 +144,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="TestAirConnector.cpp" />
-    <ClCompile Include="TestMariaDB.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="TestMariaDB.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
