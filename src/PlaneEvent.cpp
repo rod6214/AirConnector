@@ -9,7 +9,6 @@
 #include <memory>
 #include "PlaneEvent.h"
 #include "SimConnect.h"
-
 #include <iostream>
 
 static int     quit = 0;
