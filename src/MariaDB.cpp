@@ -2,6 +2,7 @@
 #include <json/json.h>
 #include <memory>
 #include <mariadb/conncpp.hpp>
+#include <curl/curl.h>
 
 struct Credentials
 {
@@ -9,32 +10,46 @@ struct Credentials
 	std::string password;
 };
 
+struct MemoryStruct {
+	char* memory;
+	size_t size;
+};
+
 static std::unique_ptr<Credentials> readConfig();
 static std::filesystem::path parentPath("");
 static void load_ParentPath();
 static std::unique_ptr<sql::Connection> connect_database(std::shared_ptr<PlaneData> ptr_planedata);
 
-void testConn() {
-	sql::Driver* driver = sql::mariadb::get_driver_instance();
+size_t write_data(void* buffer, size_t size, size_t nmemb, void* userp)
+{
+	char* ptr_data = static_cast<char*>(buffer);
 
-	sql::SQLString user("root");
-	sql::SQLString pwd("pass");
-	std::unique_ptr<sql::Connection> conn(driver->connect("tcp://localhost:3306/test", user, pwd));
+	size_t realsize = size * nmemb;
+	std::string data(realsize, '\0');
+	data.assign(ptr_data, realsize);
+	std::cout << "here" << std::endl;
 
-	// Create a new PreparedStatement
-	std::unique_ptr<sql::PreparedStatement> stmnt(conn->prepareStatement("insert into persons (name, lastname) values (?, ?)"));
+	return 0;
+}
 
-	sql::SQLString name("Jhon");
-	sql::SQLString lastname("Doe");
-	// Bind values to SQL statement
-	stmnt->setString(1, name);
-	stmnt->setString(2, lastname);
+void DLLTEMPLATE_API testCURL()
+{
+	CURL* curl_handle = curl_easy_init();
+	if (curl_handle) {
+		CURLcode res;
+		curl_easy_setopt(curl_handle, CURLOPT_URL, "http://example.com");
+		curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, write_data);
+		curl_easy_setopt(curl_handle, CURLOPT_USERAGENT, "libcurl-agent/1.0");
+		res = curl_easy_perform(curl_handle);
 
-	// Execute query
-	stmnt->executeQuery();
+		/*if(res == CURLcode::CURLE_OK) 
+		{
+			
+			res = curl_easy_perform(curl);
+		}*/
 
-	conn->close();
-
+		curl_easy_cleanup(curl_handle);
+	}
 }
 
 void DLLTEMPLATE_API insertDataPlane(std::shared_ptr<PlaneData> ptr_planedata)

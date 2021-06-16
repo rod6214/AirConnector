@@ -12,7 +12,7 @@
 #include <regex>
 #include "PlaneEvent.h"
 
-void testConn();
+void DLLTEMPLATE_API testCURL();
 void DLLTEMPLATE_API insertDataPlane(std::shared_ptr<PlaneData> ptr_planedata);
 bool DLLTEMPLATE_API positionHasChanged(std::shared_ptr<PlaneData> ptr_planedata);
 std::filesystem::path DLLTEMPLATE_API getParentPath();

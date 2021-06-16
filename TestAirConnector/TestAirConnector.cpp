@@ -25,7 +25,7 @@ void testCallback(std::shared_ptr<PlaneData> ptr_planedata)
 
 int __cdecl _tmain(int argc, _TCHAR* argv[])
 {
-    SubscribePlaneEvent(testCallback, 10);
-    
+    //SubscribePlaneEvent(testCallback, 10);
+    testCURL();
 	return 0;
 }
